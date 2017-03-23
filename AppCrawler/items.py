@@ -8,7 +8,13 @@
 import scrapy
 
 
-class AppcrawlerItem(scrapy.Item):
+class BaiduAppItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    category = scrapy.Field()
+    subcategory = scrapy.Field()
+    appname = scrapy.Field()
+    size = scrapy.Field()
+    downloadnum = scrapy.Field()
+    praisepercent = scrapy.Field()
+    
