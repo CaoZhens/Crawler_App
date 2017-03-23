@@ -3,7 +3,7 @@ import scrapy
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.http import Request
 from scrapy.linkextractors import LinkExtractor
-from app.items import BaiduAppItem
+from AppCrawler.items import BaiduAppItem
 
 import re
 
