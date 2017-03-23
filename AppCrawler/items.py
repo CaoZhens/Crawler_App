@@ -14,7 +14,7 @@ class BaiduAppItem(scrapy.Item):
     category = scrapy.Field()
     subcategory = scrapy.Field()
     appname = scrapy.Field()
+    appicon = scrapy.Field()
     size = scrapy.Field()
     downloadnum = scrapy.Field()
     praisepercent = scrapy.Field()
-    
