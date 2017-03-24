@@ -17,10 +17,11 @@ NEWSPIDER_MODULE = 'AppCrawler.spiders'
 # config msg of mongodb
 MONGO_HOST = "127.0.0.1"
 MONGO_PORT = 27017
-MONGO_DB = "Spider"
-MONGO_COLL = "baidu"
-MONGO_USER = "mySpider"
-MONGO_PSW = "mySpider123"
+MONGO_DB = "spider"
+MONGO_COLL_BAIDU = "baidu"
+#MONGO_USER = "mySpider"
+#MONGO_PSW = "mySpider123"
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'AppCrawler (+http://www.yourdomain.com)'
 
@@ -33,7 +34,7 @@ ROBOTSTXT_OBEY = True
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 0.5
+DOWNLOAD_DELAY = 1
 DOWNLOAD_HANDLERS = {
     's3':None,
 }
@@ -75,9 +76,9 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'AppCrawler.pipelines.AppcrawlerPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'AppCrawler.pipelines.AppcrawlerPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

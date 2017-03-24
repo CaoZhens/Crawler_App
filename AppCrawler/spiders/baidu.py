@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+
 import scrapy
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.http import Request
@@ -31,7 +32,7 @@ class BaiduSpider(CrawlSpider):
             App['category'] = category
             App['subcategory'] = subcategory
             App['appname'] = sel.xpath('a/div[@class="app-detail"]/p[@class="name"]/text()').extract()[0]
-            App['appicon'] = sel.xpath('a/div[@class="app-detail"]/div[@class="icon"]/img/@src').extract()
+            App['appicon'] = sel.xpath('a/div[@class="app-detail"]/div[@class="icon"]/img/@src').extract()[0]
             App['size'] = sel.xpath('a/div[@class="app-detail"]/p[@class="down-size"]/span[@class="size"]/text()').extract()[0]
             App['downloadnum'] = sel.xpath('a/div[@class="app-detail"]/p[@class="down-size"]/span[@class="down"]/text()').extract()[0]
             praisepercent_ori = sel.xpath('a/div[@class="app-popover"]/div/div[@class="appinfo-left"]/p[@class="star-wrap"]/span/span//@style').extract()[0]
