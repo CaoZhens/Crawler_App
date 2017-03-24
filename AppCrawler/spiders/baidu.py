@@ -6,6 +6,7 @@ from scrapy.linkextractors import LinkExtractor
 from AppCrawler.items import BaiduAppItem
 
 import re
+import time
 
 # the parser class of the Baidu Mobile Phone Assistant
 class BaiduSpider(CrawlSpider):
@@ -30,12 +31,13 @@ class BaiduSpider(CrawlSpider):
             App['category'] = category
             App['subcategory'] = subcategory
             App['appname'] = sel.xpath('a/div[@class="app-detail"]/p[@class="name"]/text()').extract()[0]
-            App['appicon'] = sel.xpath('a/div[@class="app-detail"]/div[@class="icon"]/img/@src').extract()[0]
+            App['appicon'] = sel.xpath('a/div[@class="app-detail"]/div[@class="icon"]/img/@src').extract()
             App['size'] = sel.xpath('a/div[@class="app-detail"]/p[@class="down-size"]/span[@class="size"]/text()').extract()[0]
             App['downloadnum'] = sel.xpath('a/div[@class="app-detail"]/p[@class="down-size"]/span[@class="down"]/text()').extract()[0]
             praisepercent_ori = sel.xpath('a/div[@class="app-popover"]/div/div[@class="appinfo-left"]/p[@class="star-wrap"]/span/span//@style').extract()[0]
             praisepercent = re.search(r'width:(\d+)', praisepercent_ori).group(1)
             App['praisepercent'] = praisepercent
+            App['gdate'] = time.strftime('%Y-%m-%d',time.localtime(time.time()))
             yield App
 
         # Auto generate the next 7 pages' url and add to the url query list

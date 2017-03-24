@@ -18,3 +18,4 @@ class BaiduAppItem(scrapy.Item):
     size = scrapy.Field()
     downloadnum = scrapy.Field()
     praisepercent = scrapy.Field()
+    gdate = scrapy.Field()
