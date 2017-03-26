@@ -7,6 +7,7 @@ from scrapy.linkextractors import LinkExtractor
 from AppCrawler.items import S360AppItem
 
 import re
+import time
 
 class S360AppSpider(CrawlSpider):
     name = 's360'
@@ -21,6 +22,33 @@ class S360AppSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('/list/index/cid/\d{2}/order/download/\?page=\d+$',)), callback='parse_app', follow=True),
         Rule(LinkExtractor(allow=('/list/index/cid/\d{6}/order/download/\?page=\d+$',)), callback='parse_app', follow=True),
     ]
+
+
+    def get_downloadnum(self, obj):
+        obj = obj.encode('utf-8')
+        if re.search(r'\d+\.*\d*', obj):
+            absolutenum = re.search(r'\d+\.*\d*', obj).group(0)
+            unit = 0.0001
+            if re.search(r'\xe4\xb8\x87', obj):
+                unit = 1
+            if re.search(r'\xe4\xba\xbf', obj):
+                unit = 10000
+            return float(absolutenum) * float(unit)
+        else:
+            return 0
+
+    def get_size(self, obj):
+        obj = obj.encode('utf-8')
+        if re.search(r'\d+\.*\d*', obj):
+            absolutenum = re.search(r'\d+\.*\d*', obj).group(0)
+            unit = 1
+            if re.search(r'M', obj):
+                unit = 1
+            if re.search(r'K', obj):
+                unit = 1.0 / 1024
+            return float(absolutenum) * float(unit)
+        else:
+            return 0
 
     # the callback func of S360AppSpider
     def parse_app(self, response):
@@ -44,7 +72,10 @@ class S360AppSpider(CrawlSpider):
         App['appname'] = response.xpath('//div[@id="app-info-panel"]/div/dl/dd/h2/span/text()').extract()[0]
         App['appicon'] = response.xpath('//div[@id="app-info-panel"]/div/dl/dt/img/@src').extract()[0]
         App['size'] = response.xpath('//div[@id="app-info-panel"]/div/dl/dd/div/span[4]/text()').extract()[0]
+        App['size'] = self.get_size(App['size'])
         App['downloadnum'] = response.xpath('//div[@id="app-info-panel"]/div/dl/dd/div/span[3]/text()').extract()[0]
+        App['downloadnum'] = self.get_downloadnum(App['downloadnum'])
         App['praisepercent'] = response.xpath('//div[@id="app-info-panel"]/div/dl/dd/div/span[1]/text()').extract()[0]
+        App['praisepercent'] = float(App['praisepercent']) * float(10.0)
         App['gdate'] = time.strftime('%Y-%m-%d', time.localtime(time.time()))
         yield App

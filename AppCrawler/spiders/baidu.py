@@ -20,6 +20,32 @@ class BaiduSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('/software/\d+/$',)), callback='parse_app')
     ]
 
+    def get_downloadnum(self, obj):
+        obj = obj.encode('utf-8')
+        if re.search(r'\d+\.*\d*', obj):
+            absolutenum = re.search(r'\d+\.*\d*', obj).group(0)
+            unit = 0.0001
+            if re.search(r'\xe4\xb8\x87', obj):
+                unit = 1
+            if re.search(r'\xe4\xba\xbf', obj):
+                unit = 10000
+            return float(absolutenum) * float(unit)
+        else:
+            return 0
+
+    def get_size(self, obj):
+        obj = obj.encode('utf-8')
+        if re.search(r'\d+\.*\d*', obj):
+            absolutenum = re.search(r'\d+\.*\d*', obj).group(0)
+            unit = 1
+            if re.search(r'MB', obj):
+                unit = 1
+            if re.search(r'KB', obj):
+                unit = 1.0 / 1024
+            return float(absolutenum) * float(unit)
+        else:
+            return 0
+
     # the callback func of BaiduSpider class
     def parse_app(self, response):
         Pagenum = '8'
@@ -34,10 +60,12 @@ class BaiduSpider(CrawlSpider):
             App['appname'] = sel.xpath('a/div[@class="app-detail"]/p[@class="name"]/text()').extract()[0]
             App['appicon'] = sel.xpath('a/div[@class="app-detail"]/div[@class="icon"]/img/@src').extract()[0]
             App['size'] = sel.xpath('a/div[@class="app-detail"]/p[@class="down-size"]/span[@class="size"]/text()').extract()[0]
+            App['size'] = self.get_size(App['size'])
             App['downloadnum'] = sel.xpath('a/div[@class="app-detail"]/p[@class="down-size"]/span[@class="down"]/text()').extract()[0]
+            App['downloadnum'] = self.get_downloadnum(App['downloadnum'])
             praisepercent_ori = sel.xpath('a/div[@class="app-popover"]/div/div[@class="appinfo-left"]/p[@class="star-wrap"]/span/span//@style').extract()[0]
             praisepercent = re.search(r'width:(\d+)', praisepercent_ori).group(1)
-            App['praisepercent'] = praisepercent
+            App['praisepercent'] = float(praisepercent)
             App['gdate'] = time.strftime('%Y-%m-%d',time.localtime(time.time()))
             yield App
 

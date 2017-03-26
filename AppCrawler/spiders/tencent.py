@@ -22,6 +22,32 @@ class TencentSpider(CrawlSpider):
         #Rule(LinkExtractor(allow=("\?apkName=")), callback='parse_app_info'),
     ]
 
+    def get_downloadnum(self, obj):
+        obj = obj.encode('utf-8')
+        if re.search(r'\d+\.*\d*', obj):
+            absolutenum = re.search(r'\d+\.*\d*', obj).group(0)
+            unit = 0.0001
+            if re.search(r'\xe4\xb8\x87', obj):
+                unit = 1
+            if re.search(r'\xe4\xba\xbf', obj):
+                unit = 10000
+            return float(absolutenum) * float(unit)
+        else:
+            return 0
+
+    def get_size(self, obj):
+        obj = obj.encode('utf-8')
+        if re.search(r'\d+\.*\d*', obj):
+            absolutenum = re.search(r'\d+\.*\d*', obj).group(0)
+            unit = 1
+            if re.search(r'M', obj):
+                unit = 1
+            if re.search(r'K', obj):
+                unit = 1.0 / 1024
+            return float(absolutenum) * float(unit)
+        else:
+            return 0
+
     # the callback func (mid) of TencentSpider class
     def parse_app(self, response):
         category = response.xpath('//div[@class="com-nav"]/div/ul//a[@class="com-nav-btn selected"]/text()').extract()[0]
@@ -44,8 +70,11 @@ class TencentSpider(CrawlSpider):
         App['appname'] = response.xpath('//div[@class="det-name"]/div[@class="det-name-int"]/text()').extract()[0]
         App['appicon'] = response.xpath('//div[@class="det-icon"]/img/@src').extract()[0]
         App['size'] = response.xpath('//div[@class="det-insnum-line"]/div[3]/text()').extract()[0]
+        App['size'] = self.get_size(App['size'])
         App['downloadnum'] = response.xpath('//div[@class="det-insnum-line"]/div[1]/text()').extract()[0]
-        App['praisepercent'] = response.xpath('//div[@class="det-star-box"]/div[2]/text()').extract()[0]
+        App['downloadnum'] = self.get_downloadnum(App['downloadnum'])
+        App['praisepercent'] = re.search(r'\d+\.*\d*', response.xpath('//div[@class="det-star-box"]/div[2]/text()').extract()[0]).group(0)
+        App['praisepercent'] = float(App['praisepercent']) * float(20.0)
         App['gdate'] = time.strftime('%Y-%m-%d', time.localtime(time.time()))
         yield App
 
