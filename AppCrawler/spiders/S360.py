@@ -10,7 +10,7 @@ import re
 import time
 
 class S360AppSpider(CrawlSpider):
-    name = 's360'
+    name = '360'
     allowed_domains = ["360.cn"]
     start_urls = [
         'http://zhushou.360.cn/list/index/cid/1',

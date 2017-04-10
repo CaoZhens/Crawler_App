@@ -18,9 +18,23 @@ class AppcrawlerPipeline(object):
         # login
         #self.client.admin.authenticate(settings['MONGO_USER'], settings['MONGO_PSW'])
         self.db = self.client[settings['MONGO_DB']]
-        self.coll = self.db[settings['MONGO_COLL_BAIDU']]
 
     def process_item(self, item, spider):
         postItem = dict(item)
-        self.coll.insert(postItem)
-        return item
+        if spider.name == 'baidu':
+            self.coll = self.db[settings['MONGO_COLL_BAIDU']]
+            self.coll.insert(postItem)
+            return item
+        elif spider.name == '360':
+            self.coll = self.db[settings['MONGO_COLL_360']]
+            self.coll.insert(postItem)
+            return item
+        elif spider.name == 'tencent':
+            self.coll = self.db[settings['MONGO_COLL_TENCENT']]
+            self.coll.insert(postItem)
+            return item
+        else:
+            return item
+
+
+

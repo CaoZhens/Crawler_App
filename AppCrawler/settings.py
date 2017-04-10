@@ -19,8 +19,8 @@ MONGO_HOST = "127.0.0.1"
 MONGO_PORT = 27017
 MONGO_DB = "spider"
 MONGO_COLL_BAIDU = "baidu"
-#MONGO_USER = "mySpider"
-#MONGO_PSW = "mySpider123"
+MONGO_COLL_360 = "s360"
+MONGO_COLL_TENCENT = "tencent"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'AppCrawler (+http://www.yourdomain.com)'
@@ -34,7 +34,7 @@ ROBOTSTXT_OBEY = True
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 1
+DOWNLOAD_DELAY = 0.025
 DOWNLOAD_HANDLERS = {
     's3':None,
 }
