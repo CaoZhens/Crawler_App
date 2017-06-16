@@ -17,6 +17,11 @@ class BaiduSpider(CrawlSpider):
         'http://shouji.baidu.com/software/',
         'http://shouji.baidu.com/software/11643951.html',
     )
+    rules = [
+        Rule(LinkExtractor(allow=('/software/\d{3}/',))),
+        Rule(LinkExtractor(allow=('/software/\d{3}/list_\d+\.html',))),
+        Rule(LinkExtractor(allow=('/software/\d+\.html',)), callback='parse_app', follow=True),
+    ]
 
     def get_downloadnum(self, obj):
         obj = obj.encode('utf-8')
