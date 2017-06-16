@@ -16,7 +16,7 @@ class GoogleSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('https://play\.google\.com/store/apps/details')), callback='parse_app', follow=True),
     ]
 
-    def parse(self, response):
+    def parse_app(self, response):
         App = GooglePlayAppItem()
         App['subcategory'] = response.xpath('//a[@class="document-subtitle category"]/span[@itemprop="genre"]/text()')
         App['appname'] = response.xpath('//div[@class="id-app-title"]/text()')
