@@ -15,12 +15,24 @@ class BaiduSpider(CrawlSpider):
     allowed_domains = ["baidu.com"]
     start_urls = (
         'http://shouji.baidu.com/software/',
+        'http://shouji.baidu.com/game/',
         'http://shouji.baidu.com/software/11643951.html',
+        'http://shouji.baidu.com/game/11697158.html',
     )
     rules = [
-        Rule(LinkExtractor(allow=('/software/\d{3}/',))),
-        Rule(LinkExtractor(allow=('/software/\d{3}/list_\d+\.html',))),
+        Rule(LinkExtractor(allow=('/topic_\d+/$',))),
+        Rule(LinkExtractor(allow=('/software/\d{3}/$',))),
+        Rule(LinkExtractor(allow=('/game/\d{3}/$',))),
+        Rule(LinkExtractor(allow=('/game/board_\d+_\d+/$',))),
+        Rule(LinkExtractor(allow=('/software/\d{3}_board_\d+_\d+/$',))),
+        Rule(LinkExtractor(allow=('/game/\d{3}_board_\d+_\d+/$',))),
+        Rule(LinkExtractor(allow=('/software/\d{3}_board_\d+_\d+/list_\d+\.html$',))),
+        Rule(LinkExtractor(allow=('/game/board_\d+_\d+/list_\d+\.html$',))),
+        Rule(LinkExtractor(allow=('/game/\d{3}_board_\d+_\d+/list_\d+\.html$',))),
+        Rule(LinkExtractor(allow=('/software/\d{3}/list_\d+\.html$',))),
+        Rule(LinkExtractor(allow=('/game/\d{3}/list_\d+\.html$',))),
         Rule(LinkExtractor(allow=('/software/\d+\.html',)), callback='parse_app', follow=True),
+        Rule(LinkExtractor(allow=('/game/\d+\.html',)), callback='parse_app', follow=True),
     ]
 
     def get_downloadnum(self, obj):

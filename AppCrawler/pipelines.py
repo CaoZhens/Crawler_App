@@ -35,6 +35,3 @@ class AppcrawlerPipeline(object):
             return item
         else:
             return item
-
-
-
